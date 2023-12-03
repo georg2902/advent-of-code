@@ -1,10 +1,12 @@
 from collections import OrderedDict
 
 
-def calibrate(input: str) -> int:
+def calibrate(raw: str) -> int:
+    input = raw
     first = None
     end = None
-    input = replace_words(input)
+    input = replace_words_front(input)
+    input = replace_words_back(input)
     for c in input:
         if c.isnumeric():
             as_int = int(c)
@@ -13,7 +15,7 @@ def calibrate(input: str) -> int:
             if first is not None:
                 end = as_int
     calibration = int(f"{first}{end}")
-    print(calibration)
+    print(f"{raw} : {calibration}")
     return calibration
 
 
@@ -23,7 +25,7 @@ def calibrate_full(input: str) -> int:
     return sum(res)
 
 
-def replace_words(input: str) -> str:
+def replace_words_front(input: str) -> str:
     search_results: dict[int, str] = {}
     for k, v in word_int_dict.items():
         i = input.find(k)
@@ -31,15 +33,29 @@ def replace_words(input: str) -> str:
             search_results[i] = k
     if len(search_results) == 0:
         return input
-    # print(sorted(search_results)[0])
     first = list(OrderedDict(sorted(search_results.items())).values())[0]
     entry = word_int_dict.get(first)
     input = input.replace(first, str(entry))
-    return replace_words(input)
+    return input
+
+
+def replace_words_back(input: str) -> str:
+    result = input[::-1]
+    search_results: dict[int, str] = {}
+    for k, v in word_int_dict.items():
+        k = k[::-1]
+        i = result.find(k)
+        if i > -1 and i not in search_results.keys():
+            search_results[i] = k
+    if len(search_results) == 0:
+        return input
+    first = list(OrderedDict(sorted(search_results.items())).values())[0]
+    entry = word_int_dict.get(first[::-1])
+    result = result.replace(first, str(entry), 1)
+    return result[::-1]
 
 
 word_int_dict = {
-    "twone": 1,
     "one": 1,
     "two": 2,
     "three": 3,
@@ -52,17 +68,17 @@ word_int_dict = {
 }
 
 if __name__ == '__main__':
-    #assert replace_words("two1nine") == "219"
-    #assert calibrate("two1nine") == 29
-    #assert calibrate("eightwothree") == 83
-    #assert calibrate("abcone2threexyz") == 13
-    #assert calibrate("xtwone3four") == 24
-    #assert calibrate("4nineeightseven2") == 42
-    #assert calibrate("zoneight234") == 14
-    #assert calibrate("7pqrstsixteen") == 76
-   # assert calibrate("ckmb52fldxkseven3fkjgcbzmnr7") == 57
-    assert calibrate("six7sixqrdfive3twonehsk") == 61
-    assert calibrate("h4") == 44
+    # assert replace_words("two1nine") == "219"
+    # assert calibrate("two1nine") == 29
+    # assert calibrate("eightwothree") == 83
+    # assert calibrate("abcone2threexyz") == 13
+    # assert calibrate("xtwone3four") == 24
+    # assert calibrate("4nineeightseven2") == 42
+    # assert calibrate("zoneight234") == 14
+    # assert calibrate("7pqrstsixteen") == 76
+    # assert calibrate("ckmb52fldxkseven3fkjgcbzmnr7") == 57
+    #assert calibrate("six7sixqrdfive3twonehsk") == 61
+    #assert calibrate("h4") == 44
     assert calibrate_full(
         """two1nine
 eightwothree
@@ -71,7 +87,8 @@ xtwone3four
 4nineeightseven2
 zoneight234
 7pqrstsixteen""") == 281
-    print(calibrate_full("""ckmb52fldxkseven3fkjgcbzmnr7
+
+print(calibrate_full("""ckmb52fldxkseven3fkjgcbzmnr7
 gckhqpb6twoqnjxqplthree2fourkspnsnzxlz1
 2onetwocrgbqm7
 frkh2nineqmqxrvdsevenfive
