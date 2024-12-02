@@ -27,7 +27,8 @@ public abstract class Day
     {
         var type = IsTestInput ? "Test Input" : string.Empty;
         Console.WriteLine($"Day {GetType().Name} {type}");
+        Solve();
     }
 
-    public abstract void Solve();
+    protected abstract void Solve();
 }

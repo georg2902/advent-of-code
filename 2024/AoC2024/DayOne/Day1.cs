@@ -11,13 +11,7 @@ public class Day1 : Day
         
     }
 
-    public new void Main()
-    {
-        base.Main();
-        Solve();
-    }
-    
-    public override void Solve()
+    protected override void Solve()
     {
         PartOne();
         PartTwo();
@@ -25,8 +19,6 @@ public class Day1 : Day
 
     public void PartOne()
     {
-        
-        // Console.WriteLine(Input);
         var pairs = Input.Split("\n").ToList().Select(p =>
         {
             var values = p.Split("   ");
@@ -57,8 +49,6 @@ public class Day1 : Day
     
     public void PartTwo()
     {
-        
-        // Console.WriteLine(Input);
         var pairs = Input.Split("\n").ToList().Select(p =>
         {
             var values = p.Split("   ");
