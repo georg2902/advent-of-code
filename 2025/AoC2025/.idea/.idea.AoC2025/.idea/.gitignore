@@ -11,3 +11,8 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+**/input.txt
+**/Input.txt
+**/INPUT.txt
+**/*input.txt
